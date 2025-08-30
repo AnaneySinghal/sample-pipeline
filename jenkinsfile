@@ -1,0 +1,38 @@
+// Jenkins Declarative Pipeline (works on Linux or Windows agents)
+pipeline {
+  agent any
+  options {
+    // show timestamps in the console and do the default SCM checkout
+    timestamps()
+    skipDefaultCheckout(false)
+  }
+  stages {
+    stage('Show Workspace Files') {
+      steps {
+        script {
+          if (isUnix()) {
+            sh 'ls -la'
+          } else {
+            bat 'dir'
+          }
+        }
+      }
+    }
+    stage('Build (Demo)') {
+      steps {
+        echo 'Building project (demo only)…'
+      }
+    }
+    stage('Package (Create/Archive hello.txt)') {
+      steps {
+        // ensure the file exists even if repo didn't have it
+        writeFile file: 'hello.txt', text: 'Hello Jenkins pipeline\n'
+        archiveArtifacts artifacts: 'hello.txt', fingerprint: true
+      }
+    }
+  }
+  post {
+    success { echo 'Pipeline finished successfully ✅' }
+    failure { echo 'Pipeline failed ❌' }
+  }
+}
