@@ -26,8 +26,8 @@ pipeline {
     stage('Package (Create/Archive hello.txt)') {
       steps {
         // ensure the file exists even if repo didn't have it
-        writeFile file: 'sample.txt', text: 'Hello Jenkins pipeline\n'
-        archiveArtifacts artifacts: 'sample.txt', fingerprint: true
+        writeFile file: 'hello.txt', text: 'Hello Jenkins pipeline\n'
+        archiveArtifacts artifacts: 'hello.txt', fingerprint: true
       }
     }
   }
@@ -36,4 +36,5 @@ pipeline {
     failure { echo 'Pipeline failed ❌' }
   }
 }
+
 
